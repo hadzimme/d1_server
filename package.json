@@ -6,7 +6,7 @@
   "author": "Hajime Wakahara <hajime.wakahara@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "./node_modules/node-dev/bin/node-dev index.js"
+    "start": "node-dev index.js"
   },
   "dependencies": {
     "express": "^4.15.2",
