@@ -7,29 +7,27 @@ const multer = require('multer');
 const fs = require('fs');
 
 const app = express();
-const upload = multer({ dest: './tmp/' });
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, './files');
+  },
+  filename: (req, file, cb) => {
+    cb(null, uuidV4());
+  },
+});
+const upload = multer({ storage });
 
 app.get('/v1/?', (req, res) => {
-  res.contentType('application/json');
-  res.send(JSON.stringify({ message: 'Hello, world!' }));
+  res.json({ message: 'Hello, world!' });
 });
 
-app.post('/v1/files', upload.fields([{ name: 'upload' }]), (req, res) => {
-  const file = req.files.upload[0];
-  const fileId = uuidV4();
-  const fileName = file.originalname;
-  const tmpPath = file.path;
-  const targetPath = './files/' + fileId;
-  fs.rename(tmpPath, targetPath, error => {
-    if (error) throw error;
-    fs.unlink(tmpPath, () => {
-      if (error) throw error;
-      res.json({
-        id: fileId,
-        message: targetPath + ' - ' + file.size + ' bytes',
-      });
-    });
-  });
+app.get('/v1/files/:id', (req, res) => {
+  res.attachment('./files/' + req.params.id);
+  res.end();
+});
+
+app.post('/v1/files', upload.single('file'), (req, res) => {
+  res.json({ id: req.file.filename });
 });
 
 const server = http.createServer(app);
