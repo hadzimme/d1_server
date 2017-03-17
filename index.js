@@ -22,8 +22,7 @@ app.get('/v1/?', (req, res) => {
 });
 
 app.get('/v1/files/:id', (req, res) => {
-  res.attachment('./files/' + req.params.id);
-  res.end();
+  res.download('./files/' + req.params.id);
 });
 
 app.post('/v1/files', upload.single('file'), (req, res) => {
