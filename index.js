@@ -4,7 +4,6 @@ const url = require('url');
 const WebSocket = require('ws');
 const uuidV4 = require('uuid/v4');
 const multer = require('multer');
-const fs = require('fs');
 
 const app = express();
 const storage = multer.diskStorage({
@@ -45,5 +44,5 @@ wss.on('connection', ws => {
 });
 
 server.listen(8080, () => {
-  console.log('Example app listening on port 8080.');
+  console.log('Listening on %d', server.address().port);
 });
